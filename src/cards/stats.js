@@ -272,7 +272,7 @@ const renderStatsCard = (stats, options = {}) => {
   const {
     hide = [],
     show_icons = false,
-    hide_title = false,
+    hide_title = true,
     hide_border = false,
     card_width,
     hide_rank = false,
