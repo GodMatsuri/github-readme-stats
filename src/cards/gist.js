@@ -8,7 +8,7 @@ import {
 } from "../common/render.js";
 import Card from "../common/Card.js";
 import { getCardColors } from "../common/color.js";
-import { kFormatter, wrapTextMultiline } from "../common/fmt.js";
+import { kFormatter } from "../common/fmt.js";
 import { encodeHTML } from "../common/html.js";
 import { icons } from "../common/icons.js";
 import { parseEmojis } from "../common/ops.js";
@@ -32,6 +32,40 @@ const HEADER_MAX_LENGTH = 35;
  * @typedef {import('./types').GistCardOptions} GistCardOptions Gist card options.
  * @typedef {import('../fetchers/types').GistData} GistData Gist data.
  */
+
+/**
+ * Wrap text into lines that fit within a pixel width, using the rendered width
+ * of the card font rather than a fixed character count. This prevents wide
+ * glyphs from overflowing the card boundary.
+ *
+ * @param {string} text Text to wrap.
+ * @param {{maxWidth: number, fontSize: number, maxLines: number}} opts Options.
+ * @returns {string[]} Wrapped lines.
+ */
+const wrapTextByWidth = (text, { maxWidth, fontSize, maxLines }) => {
+  const words = text.split(" ");
+  const lines = [];
+  let current = "";
+
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (current && measureText(candidate, fontSize) > maxWidth) {
+      lines.push(current);
+      current = word;
+    } else {
+      current = candidate;
+    }
+  }
+  if (current) {
+    lines.push(current);
+  }
+
+  if (lines.length > maxLines) {
+    lines.length = maxLines;
+    lines[maxLines - 1] += "...";
+  }
+  return lines;
+};
 
 /**
  * Render gist card.
@@ -66,10 +100,13 @@ const renderGistCard = (gistData, options = {}) => {
       theme,
     });
 
-  const lineWidth = 59;
   const linesLimit = 10;
   const desc = parseEmojis(description || "No description provided");
-  const multiLineDescription = wrapTextMultiline(desc, lineWidth, linesLimit);
+  const multiLineDescription = wrapTextByWidth(desc, {
+    maxWidth: CARD_DEFAULT_WIDTH - 50, // 25px padding on each side
+    fontSize: 13, // matches the .description font-size in the card CSS
+    maxLines: linesLimit,
+  });
   const descriptionLines = multiLineDescription.length;
   const descriptionSvg = multiLineDescription
     .map((line) => `<tspan dy="1.2em" x="25">${encodeHTML(line)}</tspan>`)

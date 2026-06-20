@@ -16,6 +16,9 @@ const data_repo = {
     stargazers: {
       totalCount: 38000,
     },
+    watchers: {
+      totalCount: 38000,
+    },
     description: "Help us take over the world! React + TS + GraphQL Chat App",
     primaryLanguage: {
       color: "#2b7489",
@@ -62,6 +65,7 @@ describe("Test /api/pin", () => {
       renderRepoCard({
         ...data_repo.repository,
         starCount: data_repo.repository.stargazers.totalCount,
+        watcherCount: data_repo.repository.watchers.totalCount,
       }),
     );
   });
@@ -93,6 +97,7 @@ describe("Test /api/pin", () => {
         {
           ...data_repo.repository,
           starCount: data_repo.repository.stargazers.totalCount,
+          watcherCount: data_repo.repository.watchers.totalCount,
         },
         { ...req.query },
       ),

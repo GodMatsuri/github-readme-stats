@@ -73,4 +73,23 @@ describe("Test color.js", () => {
       borderColor: "#fff",
     });
   });
+
+  it("getCardColors: should fall back to the default theme when an unknown theme name is passed", () => {
+    let colors = getCardColors({
+      theme: "this_theme_does_not_exist",
+    });
+    expect(colors).toStrictEqual({
+      titleColor: "#2f80ed",
+      iconColor: "#4c71f2",
+      textColor: "#434d58",
+      bgColor: "#fffefe",
+      borderColor: "#e4e2e2",
+      ringColor: "#2f80ed",
+    });
+  });
+
+  it("getCardColors: should not throw on an invalid theme (previously returned 500)", () => {
+    expect(() => getCardColors({ theme: "nonexistent" })).not.toThrow();
+  });
+
 });

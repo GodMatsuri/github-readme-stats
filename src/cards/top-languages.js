@@ -220,6 +220,7 @@ const getDisplayValue = (size, percentages, format) => {
  * @param {number} props.size Size of the programming language.
  * @param {number} props.totalSize Total size of all languages.
  * @param {string} props.statsFormat Stats format.
+ * @param {boolean=} props.disablePercentage Whether to hide the percentage number.
  * @param {number} props.index Index of the programming language.
  * @returns {string} Programming language SVG node.
  */
@@ -230,6 +231,7 @@ const createProgressTextNode = ({
   size,
   totalSize,
   statsFormat,
+  disablePercentage,
   index,
 }) => {
   const staggerDelay = (index + 3) * 150;
@@ -242,8 +244,12 @@ const createProgressTextNode = ({
 
   return `
     <g class="stagger" style="animation-delay: ${staggerDelay}ms">
-      <text data-testid="lang-name" x="2" y="15" class="lang-name">${name}</text>
-      <text x="${progressTextX}" y="34" class="lang-name">${displayValue}</text>
+       <text data-testid="lang-name" x="2" y="15" class="lang-name">${name}</text>
+      ${
+        disablePercentage
+          ? ""
+          : `<text x="${progressTextX}" y="34" class="lang-name">${displayValue}</text>`
+      }
       ${createProgressNode({
         x: 0,
         y: 25,
@@ -368,9 +374,16 @@ const createDonutLanguagesNode = ({ langs, totalSize, statsFormat }) => {
  * @param {number} width Card width.
  * @param {number} totalLanguageSize Total size of all languages.
  * @param {string} statsFormat Stats format.
+ * @param {boolean=} disablePercentage Whether to hide the percentage number.
  * @returns {string} Normal layout card SVG object.
  */
-const renderNormalLayout = (langs, width, totalLanguageSize, statsFormat) => {
+const renderNormalLayout = (
+  langs,
+  width,
+  totalLanguageSize,
+  statsFormat,
+  disablePercentage,
+) => {
   return flexLayout({
     items: langs.map((lang, index) => {
       return createProgressTextNode({
@@ -380,6 +393,7 @@ const renderNormalLayout = (langs, width, totalLanguageSize, statsFormat) => {
         size: lang.size,
         totalSize: totalLanguageSize,
         statsFormat,
+        disablePercentage,
         index,
       });
     }),
@@ -797,6 +811,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
     border_radius,
     border_color,
     disable_animations,
+    disable_percentage = false,
     stats_format = "percentages",
   } = options;
 
@@ -873,6 +888,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
       width,
       totalLanguageSize,
       stats_format,
+      disable_percentage,
     );
   }
 

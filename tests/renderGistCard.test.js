@@ -66,7 +66,11 @@ describe("test renderGistCard", () => {
 
     expect(
       document.getElementsByClassName("description")[0].children[1].textContent,
-    ).toBe("English-language pangram—a sentence that contains all");
+    ).toBe("English-language pangram—a sentence that contains all of");
+
+    expect(
+      document.getElementsByClassName("description")[0].children[2].textContent,
+    ).toBe("the letters of the English alphabet");
   });
 
   it("should not trim description if it is short", () => {
@@ -236,4 +240,24 @@ describe("test renderGistCard", () => {
       "No description provided",
     );
   });
+
+  it("should wrap the description by rendered width, not character count", () => {
+    // 59 characters of wide glyphs -> exceeds the card width -> 2 lines
+    const wide = Array(10).fill("WWWWW").join(" ");
+    document.body.innerHTML = renderGistCard({ ...data, description: wide });
+    const wideLines =
+      document.getElementsByClassName("description")[0].children.length;
+
+    // 59 characters of narrow glyphs -> fits within the card width -> 1 line
+    const narrow = Array(10).fill("iiiii").join(" ");
+    document.body.innerHTML = renderGistCard({ ...data, description: narrow });
+    const narrowLines =
+      document.getElementsByClassName("description")[0].children.length;
+
+    expect(wideLines).toBe(2);
+    expect(narrowLines).toBe(1);
+    // wide text must wrap onto more lines than the same-length narrow text
+    expect(wideLines).toBeGreaterThan(narrowLines);
+  });
+
 });

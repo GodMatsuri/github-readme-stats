@@ -24,6 +24,9 @@ const fetcher = (variables, token) => {
         stargazers {
           totalCount
         }
+        watchers {
+          totalCount
+        }  
         description
         primaryLanguage {
           color
@@ -95,6 +98,7 @@ const fetchRepo = async (username, reponame) => {
     return {
       ...data.user.repository,
       starCount: data.user.repository.stargazers.totalCount,
+      watcherCount: data.user.repository.watchers.totalCount,
     };
   }
 
@@ -108,6 +112,7 @@ const fetchRepo = async (username, reponame) => {
     return {
       ...data.organization.repository,
       starCount: data.organization.repository.stargazers.totalCount,
+      watcherCount: data.organization.repository.watchers.totalCount,
     };
   }
 

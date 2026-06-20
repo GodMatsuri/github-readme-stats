@@ -17,6 +17,7 @@ const data_repo = {
     },
     starCount: 38000,
     forkCount: 100,
+    watcherCount: 50,
   },
 };
 
@@ -368,4 +369,10 @@ describe("Test renderRepoCard", () => {
     );
     expect(document.querySelector("svg")).toHaveAttribute("height", "120");
   });
+
+  it("should render the watcher count", () => {
+    document.body.innerHTML = renderRepoCard(data_repo.repository);
+    expect(queryByTestId(document.body, "watcherscount")).toHaveTextContent("50");
+  });
+
 });

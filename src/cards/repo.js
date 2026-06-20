@@ -63,6 +63,7 @@ const renderRepoCard = (repo, options = {}) => {
     isTemplate,
     starCount,
     forkCount,
+    watcherCount,
   } = repo;
   const {
     hide_border = false,
@@ -125,6 +126,7 @@ const renderRepoCard = (repo, options = {}) => {
 
   const totalStars = kFormatter(starCount);
   const totalForks = kFormatter(forkCount);
+  const totalWatchers = kFormatter(watcherCount);
   const svgStars = iconWithLabel(
     icons.star,
     totalStars,
@@ -137,13 +139,20 @@ const renderRepoCard = (repo, options = {}) => {
     "forkcount",
     ICON_SIZE,
   );
+  const svgWatchers = iconWithLabel(
+    icons.watchers,
+    totalWatchers,
+    "watcherscount",
+    ICON_SIZE,
+  );
 
   const starAndForkCount = flexLayout({
-    items: [svgLanguage, svgStars, svgForks],
+    items: [svgLanguage, svgStars, svgForks, svgWatchers],
     sizes: [
       measureText(langName, 12),
       ICON_SIZE + measureText(`${totalStars}`, 12),
       ICON_SIZE + measureText(`${totalForks}`, 12),
+      ICON_SIZE + measureText(`${totalWatchers}`, 12),
     ],
     gap: 25,
   }).join("");

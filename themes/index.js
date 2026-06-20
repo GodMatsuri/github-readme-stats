@@ -462,6 +462,27 @@ export const themes = {
     icon_color: "ffffff",
     bg_color: "35,4158d0,c850c0,ffcc70",
   },
+  ocean_breeze: {
+    title_color: "00b4d8",
+    icon_color: "0077b6",
+    text_color: "caf0f8",
+    bg_color: "03045e",
+    border_color: "0096c7",
+  },
+  sunset_glow: {
+    title_color: "ff7b00",
+    icon_color: "ff9e00",
+    text_color: "ffe5b4",
+    bg_color: "2b1700",
+    border_color: "ff6d00",
+  },
+  forest_night: {
+    title_color: "95d5b2",
+    icon_color: "52b788",
+    text_color: "d8f3dc",
+    bg_color: "081c15",
+    border_color: "2d6a4f",
+  },
 };
 
 export default themes;

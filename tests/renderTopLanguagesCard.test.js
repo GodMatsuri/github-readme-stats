@@ -883,4 +883,30 @@ describe("Test renderTopLanguages", () => {
       "css 100.0 B",
     );
   });
+
+  it("should render percentage numbers in the normal layout by default", () => {
+    document.body.innerHTML = renderTopLanguages(langs, { layout: "normal" });
+
+    // 3 languages -> 3 name nodes + 3 percentage nodes = 6 elements by class
+    expect(document.getElementsByClassName("lang-name").length).toBe(6);
+    expect(queryAllByTestId(document.body, "lang-progress").length).toBe(3);
+  });
+
+  it("should hide percentage numbers but keep progress bars when disable_percentage is true", () => {
+    document.body.innerHTML = renderTopLanguages(langs, {
+      layout: "normal",
+      disable_percentage: true,
+    });
+
+    // names remain (3), percentage text nodes are gone -> only 3 by class now
+    expect(document.getElementsByClassName("lang-name").length).toBe(3);
+    expect(queryAllByTestId(document.body, "lang-name").length).toBe(3);
+
+    // the visual progress bars must still be present
+    expect(queryAllByTestId(document.body, "lang-progress").length).toBe(3);
+    expect(queryAllByTestId(document.body, "lang-name")[0]).toHaveTextContent(
+      "HTML",
+    );
+  });
+
 });
